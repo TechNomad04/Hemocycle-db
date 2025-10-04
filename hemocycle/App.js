@@ -47,6 +47,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      <Button title="Submit"/>
       <TextInput placeholder="Enter your name" value={text} onChangeText={setText}/>
       <Button title="Upload Picture" onPress={pickImage}/>
       <Button title="Take picture" onPress={takePicture}/>
