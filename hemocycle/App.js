@@ -25,10 +25,29 @@ export default function App() {
       setImage(result.assets[0].uri)
   }
 
+  const takePicture = async() => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+
+    if(status !== 'granted') {
+      alert("Access to camera denied")
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4,3],
+      quality: 1
+    })
+
+    if(!result.canceled) 
+      setImage(result.assets[0].uri)
+  }
+
   return (
     <View style={styles.container}>
       <TextInput placeholder="Enter your name" value={text} onChangeText={setText}/>
       <Button title="Upload Picture" onPress={pickImage}/>
+      <Button title="Take picture" onPress={takePicture}/>
       {image && <Image source={{uri: image}} style={styles.image}/>}
     </View>
   )
