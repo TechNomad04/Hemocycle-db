@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { TextInput, View, StyleSheet, Button, Image } from "react-native";
 import * as ImagePicker from 'expo-image-picker'
+import {Picker} from "@react-native-picker/picker"
 
 export default function App() {
   const [text, setText] = useState('')
   const [image, setImage] = useState(null)
+  const [selectedVal, setSelectedValue] = useState('Non-Anemic')
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -48,6 +50,11 @@ export default function App() {
       <TextInput placeholder="Enter your name" value={text} onChangeText={setText}/>
       <Button title="Upload Picture" onPress={pickImage}/>
       <Button title="Take picture" onPress={takePicture}/>
+      <Picker selectedValue={selectedVal} onValueChange={(item) => setSelectedValue(item)}style={styles.picker} >
+        <Picker.Item label="Non-Anemic" value="Non-Anemic"/>
+        <Picker.Item label="Mild" value="Mild" />
+        <Picker.Item label="Severe" value="Severe" />
+      </Picker>
       {image && <Image source={{uri: image}} style={styles.image}/>}
     </View>
   )
@@ -64,5 +71,10 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 10,
     marginTop: 20,
+  },
+  picker: {
+    height: 50,
+    width: "100%",
+    marginBottom: 20,
   },
 })
