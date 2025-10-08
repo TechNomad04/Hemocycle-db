@@ -1,27 +1,50 @@
 import { TextInput, View, StyleSheet, Text, TouchableOpacity } from "react-native"
 import { Picker } from '@react-native-picker/picker';
+import axios from "axios";
+import { useState } from "react";
+import CONFIG from "../config";
 
 export default function NewRecord() {
+    const [name, setName] = useState('')
+    const [gender, setGender] = useState('')
+    const [age, setAge] = useState('')
+
+    const addRecord = async() => {
+        try {
+            const response = await axios.post(`http://${CONFIG.IP}:5000/addinfo/`, {
+                name,
+                gender,
+                age
+            })
+            console.log(response.data)
+        } catch(err) {
+            console.log(err.message)
+        }
+    }
     return (
         <View style={styles.container}>
             <Text>Name</Text>
             <TextInput
             style={styles.input}
             placeholder="Enter Name"
+            value={name}
+            onChangeText={setName}
             />
             <Text>Age</Text>
             <TextInput
             style={styles.input}
             placeholder="Enter Age"
             keyboardType="numeric"
+            value={age}
+            onChangeText={setAge}
             />
-            <Picker style={styles.picker}>
+            <Picker style={styles.picker} selectedValue={gender} onValueChange={(gen)=>setGender(gen)}>
                 <Picker.Item label="Female" value="female" />
                 <Picker.Item label="Male" value="male" />
                 <Picker.Item label="Other" value="other" />
             </Picker>
 
-            <TouchableOpacity style={styles.submit}>
+            <TouchableOpacity style={styles.submit} onPress={addRecord}>
                 <Text>Submit</Text>
             </TouchableOpacity>
         </View>

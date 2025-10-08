@@ -10,4 +10,3 @@ app.use('/', userinfoRoutes)
 connectdb().then(() => {
     app.listen(process.env.PORT, () => console.log("Server and database connected"))
 }).catch(err => console.log(err))
-app.listen(5000, () => console.log("Server started"))

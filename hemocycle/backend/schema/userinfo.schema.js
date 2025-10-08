@@ -5,10 +5,14 @@ const userSchema = new mongoose.Schema({
         type: String, 
         required: true
     },
-    category: {
+    gender: {
         type: String,
-        enum: ['Non-Anemic', 'Mild', 'Severe'],
-        default: 'Non-Anemic'
+        enum: ['male', 'female', 'other'],
+        default: 'female'
+    },
+    age: {
+        type: Number,
+        required: true
     }
 }, {timestamps: true})
 

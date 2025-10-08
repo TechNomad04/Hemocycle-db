@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const {addData} = require('../controllers/userdata.controllers')
+const {addRecord} = require('../controllers/userdata.controllers')
 
-router.post('/addinfo', addData)
+router.post('/addinfo', addRecord)
 
 module.exports = router
