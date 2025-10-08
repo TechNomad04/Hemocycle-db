@@ -1,10 +1,10 @@
 import { View, TouchableOpacity, Text } from "react-native"
 import { StyleSheet } from "react-native"
 
-export default function HomeScreen () {
+export default function HomeScreen ({navigation}) {
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate("New Record")}>
             <Text style={styles.buttonText}>New Record</Text>
             </TouchableOpacity>
         </View>

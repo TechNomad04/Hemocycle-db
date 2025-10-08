@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState } from "react";
 import CONFIG from "../config";
 
-export default function NewRecord() {
+export default function NewRecord({navigation}) {
     const [name, setName] = useState('')
     const [gender, setGender] = useState('')
     const [age, setAge] = useState('')
@@ -43,6 +43,10 @@ export default function NewRecord() {
                 <Picker.Item label="Male" value="male" />
                 <Picker.Item label="Other" value="other" />
             </Picker>
+
+            <TouchableOpacity style={styles.submit} onPress={() => navigation.navigate("Uploads")}>
+                <Text>Uploads</Text>
+            </TouchableOpacity>
 
             <TouchableOpacity style={styles.submit} onPress={addRecord}>
                 <Text>Submit</Text>
