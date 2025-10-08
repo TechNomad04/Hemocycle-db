@@ -1,94 +1,16 @@
-import { useState } from "react";
-import { TextInput, View, StyleSheet, Button, Image } from "react-native";
-import * as ImagePicker from 'expo-image-picker'
-import {Picker} from "@react-native-picker/picker"
-import axios from "axios";
+import HomeScreen from './Screens/Home';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import NewRecord from './Screens/NewRecord';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [text, setText] = useState('')
-  const [image, setImage] = useState(null)
-  const [selectedVal, setSelectedValue] = useState('Non-Anemic')
-
-  const sendData = async() => {
-    try {
-      const response = await axios.post("http://10.242.96.79:5000/addinfo",{
-        name: text,
-        category: selectedVal
-      })
-      console.log(response.data)
-    } catch (err) {
-      console.log(err.message)
-    }
-  }
-
-  const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-
-    if(!permissionResult.granted) {
-      alert('Permission not granted');
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1
-    })
-
-    if(!result.canceled)
-      setImage(result.assets[0].uri)
-  }
-
-  const takePicture = async() => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-
-    if(status !== 'granted') {
-      alert("Access to camera denied")
-      return;
-    }
-
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [4,3],
-      quality: 1
-    })
-
-    if(!result.canceled) 
-      setImage(result.assets[0].uri)
-  }
-
   return (
-    <View style={styles.container}>
-      <Button title="Submit" onPress={sendData}/>
-      <TextInput placeholder="Enter your name" value={text} onChangeText={setText}/>
-      <Button title="Upload Picture" onPress={pickImage}/>
-      <Button title="Take picture" onPress={takePicture}/>
-      <Picker selectedValue={selectedVal} onValueChange={(item) => setSelectedValue(item)}style={styles.picker} >
-        <Picker.Item label="Non-Anemic" value="Non-Anemic"/>
-        <Picker.Item label="Mild" value="Mild" />
-        <Picker.Item label="Severe" value="Severe" />
-      </Picker>
-      {image && <Image source={{uri: image}} style={styles.image}/>}
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={NewRecord}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex:1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  image: {
-    width: 300,
-    height: 200,
-    borderRadius: 10,
-    marginTop: 20,
-  },
-  picker: {
-    height: 50,
-    width: "100%",
-    marginBottom: 20,
-  },
-})
