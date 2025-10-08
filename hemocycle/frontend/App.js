@@ -2,11 +2,24 @@ import { useState } from "react";
 import { TextInput, View, StyleSheet, Button, Image } from "react-native";
 import * as ImagePicker from 'expo-image-picker'
 import {Picker} from "@react-native-picker/picker"
+import axios from "axios";
 
 export default function App() {
   const [text, setText] = useState('')
   const [image, setImage] = useState(null)
   const [selectedVal, setSelectedValue] = useState('Non-Anemic')
+
+  const sendData = async() => {
+    try {
+      const response = await axios.post("http://10.242.96.79:5000/addinfo",{
+        name: text,
+        category: selectedVal
+      })
+      console.log(response.data)
+    } catch (err) {
+      console.log(err.message)
+    }
+  }
 
   const pickImage = async () => {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
@@ -47,7 +60,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Button title="Submit"/>
+      <Button title="Submit" onPress={sendData}/>
       <TextInput placeholder="Enter your name" value={text} onChangeText={setText}/>
       <Button title="Upload Picture" onPress={pickImage}/>
       <Button title="Take picture" onPress={takePicture}/>
