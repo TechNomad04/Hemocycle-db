@@ -6,7 +6,7 @@ import CONFIG from "../config";
 
 export default function NewRecord({navigation}) {
     const [name, setName] = useState('')
-    const [gender, setGender] = useState('')
+    const [gender, setGender] = useState('Female')
     const [age, setAge] = useState('')
 
     const addRecord = async() => {
@@ -17,6 +17,7 @@ export default function NewRecord({navigation}) {
                 age
             })
             console.log(response.data)
+            navigation.navigate("Uploads", {name, age, gender})
         } catch(err) {
             console.log(err.message)
         }
@@ -44,12 +45,9 @@ export default function NewRecord({navigation}) {
                 <Picker.Item label="Other" value="other" />
             </Picker>
 
-            <TouchableOpacity style={styles.submit} onPress={() => navigation.navigate("Uploads")}>
-                <Text>Uploads</Text>
-            </TouchableOpacity>
 
             <TouchableOpacity style={styles.submit} onPress={addRecord}>
-                <Text>Submit</Text>
+                <Text>Upload</Text>
             </TouchableOpacity>
         </View>
     )
