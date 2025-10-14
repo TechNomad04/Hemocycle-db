@@ -7,8 +7,13 @@ const userSchema = new mongoose.Schema({
     },
     gender: {
         type: String,
-        enum: ['male', 'female', 'other'],
-        default: 'female'
+        enum: ['Male', 'Female', 'Other'],
+        default: 'Female'
+    },
+    category: {
+        type: String,
+        enum: ['Non-Anemic', 'Mild', 'Severe'],
+        default: 'Non-Anemic'
     },
     age: {
         type: Number,
