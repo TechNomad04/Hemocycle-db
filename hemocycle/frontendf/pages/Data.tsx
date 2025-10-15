@@ -17,7 +17,7 @@ function Data () {
     useEffect(()=> {
         const fetch = async () => {
             try {
-                const response = await axios.get(`http://${CONFIG.ip}/fetchdata/`)
+                const response = await axios.get(`http://${CONFIG.ip}:5000/fetchdata/`)
                 console.log(response.data)
                 setData(response.data.users)
 
