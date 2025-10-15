@@ -17,7 +17,7 @@ function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName='Home'>
+      <Stack.Navigator initialRouteName='Home' >
         <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="New record" component={NewRecord}/>
         <Stack.Screen name="Data" component={Data}/>
