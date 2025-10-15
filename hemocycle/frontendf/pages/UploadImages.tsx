@@ -1,6 +1,8 @@
 import { View, Image, Button, StyleSheet, PermissionsAndroid, Alert } from "react-native"
 import { launchImageLibrary, launchCamera } from "react-native-image-picker"
 import { useState } from "react"
+import axios from "axios"
+import {CONFIG} from '../config'
 
 async function requestCameraPermission() {
   try {
@@ -15,9 +17,27 @@ async function requestCameraPermission() {
       }
     )
     return granted === PermissionsAndroid.RESULTS.GRANTED
-  } catch (err) {
-    console.warn(err)
+  } catch {
     return false
+  }
+}
+
+async function uploadToServer(uri: string, fileName: string) {
+  const formData = new FormData()
+  formData.append("file", {
+    uri,
+    name: fileName,
+    type: "image/jpeg",
+  } as any)
+
+  try {
+    await axios.post(`http://${CONFIG.ip}:5000/upload`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    Alert.alert("Success", "Image uploaded to server")
+  } catch (err) {
+    Alert.alert("Error", "Failed to upload image")
+    console.log(err)
   }
 }
 
@@ -27,7 +47,11 @@ export default function UploadImages() {
   const pickImage = async () => {
     const result = await launchImageLibrary({ mediaType: "photo", quality: 1 })
     const uri = result.assets?.[0]?.uri ?? null
-    if (uri) setImageUri(uri)
+    const name = result.assets?.[0]?.fileName ?? "image.jpg"
+    if (uri) {
+      setImageUri(uri)
+      await uploadToServer(uri, name)
+    }
   }
 
   const captureFromCamera = async () => {
@@ -36,15 +60,13 @@ export default function UploadImages() {
       Alert.alert("Permission denied", "Camera permission is required.")
       return
     }
-
-    const result = await launchCamera({
-      mediaType: "photo",
-      saveToPhotos: true,
-      quality: 1,
-    })
-
+    const result = await launchCamera({ mediaType: "photo", saveToPhotos: true, quality: 1 })
     const uri = result.assets?.[0]?.uri ?? null
-    if (uri) setImageUri(uri)
+    const name = result.assets?.[0]?.fileName ?? "image.jpg"
+    if (uri) {
+      setImageUri(uri)
+      await uploadToServer(uri, name)
+    }
   }
 
   return (
