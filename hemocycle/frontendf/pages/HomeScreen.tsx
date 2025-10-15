@@ -1,6 +1,4 @@
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native"
-import axios from "axios"
-import { useState, useEffect } from "react"
 
 function HomeScreen ({navigation}:any) {
 

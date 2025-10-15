@@ -3,8 +3,9 @@ import { Picker } from "@react-native-picker/picker"
 import React from "react"
 import { useState } from "react"
 import axios from "axios"
+import {CONFIG} from '../config'
 
-function NewRecord () {
+function NewRecord ({navigation}:any) {
     const [name, setName] = useState<string>('')
     const [age, setAge] = useState<string>('')
     const [gender, setGender] = useState<string>('Male')
@@ -12,7 +13,7 @@ function NewRecord () {
 
     const submitinfo = async() => {
         try {
-            const response = await axios.post('http://192.168.137.1:5000/addinfo/', {
+            const response = await axios.post(`http://${CONFIG.ip}:5000/addinfo/`, {
                 name,
                 age,
                 gender,
@@ -40,6 +41,9 @@ function NewRecord () {
         </Picker>
         <TouchableOpacity style={styles.button} onPress={submitinfo}>
             <Text>Submit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Upload')}>
+            <Text>Upload Immages</Text>
         </TouchableOpacity>
        </View> 
     )

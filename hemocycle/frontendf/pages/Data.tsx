@@ -1,6 +1,7 @@
 import { View, StyleSheet, FlatList, Text } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {CONFIG} from '../config'
 
 type recordType = {
     name: string,
@@ -16,7 +17,7 @@ function Data () {
     useEffect(()=> {
         const fetch = async () => {
             try {
-                const response = await axios.get('http://192.168.137.1:5000/fetchdata/')
+                const response = await axios.get(`http://${CONFIG.ip}/fetchdata/`)
                 console.log(response.data)
                 setData(response.data.users)
 

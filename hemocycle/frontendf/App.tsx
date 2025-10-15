@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './pages/HomeScreen';
 import NewRecord from './pages/NewRecord';
 import Data from './pages/Data';
+import UploadImages from './pages/UploadImages';
 
 const Stack = createNativeStackNavigator()
 
@@ -21,6 +22,7 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen}/>
         <Stack.Screen name="New record" component={NewRecord}/>
         <Stack.Screen name="Data" component={Data}/>
+        <Stack.Screen name="Upload" component={UploadImages}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
