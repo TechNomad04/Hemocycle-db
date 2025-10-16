@@ -1,4 +1,4 @@
-import { View, StyleSheet, FlatList, Text } from "react-native";
+import { View, StyleSheet, FlatList, Text, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {CONFIG} from '../config'
@@ -7,10 +7,11 @@ type recordType = {
     name: string,
     age: number,
     gender: string,
-    category: string
+    category: string,
+    _id: string
 }
 
-function Data () {
+function Data ({navigation}:any) {
     const [data, setData] = useState<recordType[]>([])
     const [loading, setLoading] = useState<boolean>(true)
 
@@ -32,10 +33,14 @@ function Data () {
 
     const renderItems = ({item}: {item: recordType}) => (
         <View style={styles.item}>
+            <Text>User Id: {item._id}</Text>
             <Text>Name: {item.name}</Text>
             <Text>Age: {item.age}</Text>
             <Text>Gender: {item.gender}</Text>
             <Text>Gender: {item.category}</Text>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Upload', {id: item._id})}>
+                <Text>Uploads</Text>
+            </TouchableOpacity>
         </View>
     )
 
@@ -65,6 +70,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 6,
   },
+  button: {
+        backgroundColor:'pink'
+    }
 })
 
 export default Data;
