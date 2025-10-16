@@ -2,7 +2,7 @@ import { View, Image, Button, StyleSheet, PermissionsAndroid, Alert } from "reac
 import { launchImageLibrary, launchCamera } from "react-native-image-picker"
 import { useState } from "react"
 import axios from "axios"
-import {CONFIG} from '../config'
+import { CONFIG } from '../config'
 
 async function requestCameraPermission() {
   try {
@@ -22,13 +22,14 @@ async function requestCameraPermission() {
   }
 }
 
-async function uploadToServer(uri: string, fileName: string) {
+async function uploadToServer(uri: string, fileName: string, id: string) {
   const formData = new FormData()
   formData.append("file", {
     uri,
     name: fileName,
     type: "image/jpeg",
   } as any)
+  formData.append("id", id)
 
   try {
     await axios.post(`http://${CONFIG.ip}:5000/upload`, formData, {
@@ -41,8 +42,9 @@ async function uploadToServer(uri: string, fileName: string) {
   }
 }
 
-export default function UploadImages() {
+export default function UploadImages({ route }: any) {
   const [imageUri, setImageUri] = useState<string | null>(null)
+  const id = route.params.id
 
   const pickImage = async () => {
     const result = await launchImageLibrary({ mediaType: "photo", quality: 1 })
@@ -50,7 +52,7 @@ export default function UploadImages() {
     const name = result.assets?.[0]?.fileName ?? "image.jpg"
     if (uri) {
       setImageUri(uri)
-      await uploadToServer(uri, name)
+      await uploadToServer(uri, name, id)
     }
   }
 
@@ -65,7 +67,7 @@ export default function UploadImages() {
     const name = result.assets?.[0]?.fileName ?? "image.jpg"
     if (uri) {
       setImageUri(uri)
-      await uploadToServer(uri, name)
+      await uploadToServer(uri, name, id)
     }
   }
 

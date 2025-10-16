@@ -10,6 +10,7 @@ function NewRecord ({navigation}:any) {
     const [age, setAge] = useState<string>('')
     const [gender, setGender] = useState<string>('Male')
     const [category, setCategory] = useState<string>('Non-Anemic')
+    const [id, setid] = useState<string>('')
 
     const submitinfo = async() => {
         try {
@@ -20,6 +21,7 @@ function NewRecord ({navigation}:any) {
                 category
             })
             console.log(response.data)
+            setid(response.data.user._id)
         } catch (err:any) {
             console.log(err.message)
         }
@@ -42,7 +44,7 @@ function NewRecord ({navigation}:any) {
         <TouchableOpacity style={styles.button} onPress={submitinfo}>
             <Text>Submit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Upload')}>
+        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Upload', {id})}>
             <Text>Upload Images</Text>
         </TouchableOpacity>
        </View> 

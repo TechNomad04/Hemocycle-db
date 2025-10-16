@@ -1,7 +1,7 @@
 const User = require('../schema/userinfo.schema')
 const { google } = require('googleapis')
 const fs = require('fs')
-
+require('dotenv').config();
 const addRecord = async(req, res) => {
     try {
         const {name, gender, age, category} = req.body
@@ -11,7 +11,7 @@ const addRecord = async(req, res) => {
         const user = new User({name, gender, age, category})
         await user.save()
 
-        return res.status(200).json({status:true, details: {name, gender, age, category}})
+        return res.status(200).json({status:true, user})
     } catch(err) {
         console.log(err)
         return res.status(500).json({status:false, message: "Internal server error"})
@@ -69,6 +69,7 @@ const oauth2callback = async(req, res) => {
 
 const uploadimage = async (req, res) => {
     try {
+        const id = req.body.id;
         const drive = google.drive({ version: 'v3', auth: oAuth2Client })
         const filePath = req.file.path
         const fileName = req.file.originalname
@@ -88,7 +89,13 @@ const uploadimage = async (req, res) => {
         })
 
         fs.unlinkSync(filePath)
-        res.json({ success: true, fileId: response.data.id, name: response.data.name })
+        const fileId = response.data.id
+        const publicurl = `https://drive.google.com/uc?id=${fileId}`
+        const user = await User.findByIdAndUpdate(id, {$push: {images: publicurl}}, {new: true})
+
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' })
+
+        res.json({ success: true, fileId: response.data.id, name: response.data.name, user })
     } catch (err) {
         console.error(err)
         res.status(500).json({ success: false, error: err.message })
