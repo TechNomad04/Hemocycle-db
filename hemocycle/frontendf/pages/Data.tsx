@@ -18,7 +18,7 @@ function Data ({navigation}:any) {
     useEffect(()=> {
         const fetch = async () => {
             try {
-                const response = await axios.get(`http://${CONFIG.ip}:5000/fetchdata/`)
+                const response = await axios.get(`http://${CONFIG.ip}:5000/fetchdata`)
                 console.log(response.data)
                 setData(response.data.users)
 
@@ -48,12 +48,21 @@ function Data ({navigation}:any) {
             <Text>Name: {item.name}</Text>
             <Text>Age: {item.age}</Text>
             <Text>Gender: {item.gender}</Text>
-            <Text>Gender: {item.category}</Text>
+            <Text>Category: {item.category}</Text>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Upload', {id: item._id})}>
                 <Text>Uploads</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => deleteEntry(item._id)}>
                 <Text>Delete Entry</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Edit', {
+                id: item._id,
+                n: item.name,
+                a: item.age,
+                g: item.gender,
+                c: item.category
+            })}>
+                <Text>Edit</Text>
             </TouchableOpacity>
         </View>
     )

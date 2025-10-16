@@ -106,11 +106,37 @@ const uploadimage = async (req, res) => {
     }
 }
 
+const edit = async(req, res) => {
+    try{
+        const {id, name, age, gender, category} = req.body;
+        if(!id)
+            return res.status(400).json({status: false, message: "Bad request"})
+        if(!name && !age && !gender && !category)
+            return res.status(200).json({status: true, message: "No change requested"})
+        const user = await User.findById(id)
+        if(name)
+            user.name = name
+        if(age)
+            user.age = age
+        if(gender)
+            user.gender = gender
+        if(category)
+            user.category = category
+
+        await user.save()
+        return res.status(200).json({status: true, user})
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({status: false, message: "Internal server error"})
+    }
+}
+
 module.exports = {
     addRecord,
     fetchData,
     deleteRecord,
     uploadimage,
     auth,
-    oauth2callback
+    oauth2callback,
+    edit,
 }
