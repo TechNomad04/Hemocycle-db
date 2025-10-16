@@ -28,13 +28,16 @@ const fetchData = async(req, res) => {
     }
 }
 
-const deleteRecord = async() => {
+const deleteRecord = async(req, res) => {
     try {
-        const {name, age, gender} = req.body
-        if(!name || !age || !gender)
-            return res.status(400).json({status: false, message: "Missing details"})
-        const user = await User.findOneAndDelete({name, age, gender})
-        await user.save()
+        const id = req.body.id;
+        if(!id)
+            return res.status(400).json({status: false, message: "User id absent"})
+
+        const user = await User.findByIdAndDelete(id)
+        if(!user)
+            return res.status(404).json({status: false, message: "User not found"})
+
         return res.status(200).json({status: true, user})
     } catch(err) {
         console.log(err)
@@ -70,6 +73,7 @@ const oauth2callback = async(req, res) => {
 const uploadimage = async (req, res) => {
     try {
         const id = req.body.id;
+        
         const drive = google.drive({ version: 'v3', auth: oAuth2Client })
         const filePath = req.file.path
         const fileName = req.file.originalname

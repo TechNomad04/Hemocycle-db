@@ -31,6 +31,17 @@ function Data ({navigation}:any) {
         fetch()
     }, [])
 
+    const deleteEntry = async(id:string) => {
+        try {
+            const response = await axios.delete(`http://${CONFIG.ip}:5000/deleteRecord`, {
+                data: {id}
+            })
+            console.log(response.data)
+        } catch(err:any) {
+            console.log(err.message)
+        }
+    }
+
     const renderItems = ({item}: {item: recordType}) => (
         <View style={styles.item}>
             <Text>User Id: {item._id}</Text>
@@ -40,6 +51,9 @@ function Data ({navigation}:any) {
             <Text>Gender: {item.category}</Text>
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Upload', {id: item._id})}>
                 <Text>Uploads</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => deleteEntry(item._id)}>
+                <Text>Delete Entry</Text>
             </TouchableOpacity>
         </View>
     )
