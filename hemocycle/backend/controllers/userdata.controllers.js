@@ -51,6 +51,9 @@ const REDIRECT_URI = `http://localhost:5000/oauth2callback`
 
 const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
 const SCOPES = ['https://www.googleapis.com/auth/drive.file']
+const drive = google.drive({ version: 'v3', auth: oAuth2Client })
+
+const folderId = '1PuMvCtVIUdXtH4xALE4lJryn1R1vi000'
 
 if (fs.existsSync('tokens.json')) {
     const tokens = JSON.parse(fs.readFileSync('tokens.json'))
@@ -73,12 +76,8 @@ const oauth2callback = async(req, res) => {
 const uploadimage = async (req, res) => {
     try {
         const id = req.body.id;
-        
-        const drive = google.drive({ version: 'v3', auth: oAuth2Client })
         const filePath = req.file.path
         const fileName = req.file.originalname
-
-        const folderId = '1PuMvCtVIUdXtH4xALE4lJryn1R1vi000'
 
         const response = await drive.files.create({
             requestBody: {
@@ -145,6 +144,27 @@ const fetchUserImages = async(req, res) => {
     }
 }
 
+const deleteImage = async(req, res) => {
+    try {
+
+        const extractFileId = (url) => {
+            const match = url.match(/id=([^&]+)/)
+            return match ? match[1] : null
+        }
+        const {imageurl, id} = req.body
+        const user = await User.findByIdAndUpdate(id, {$pull:{images: imageurl}}, {new: true})
+        await user.save()
+        if(!user)
+            return res.status(404).json({status: false, message: "Image or user not found"})
+        const fileId = extractFileId(imageurl)
+        await drive.files.delete({fileId})
+        return res.status(200).json({status: true, images: user.images})
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({status: false, message: "Internal server error"}) 
+    }
+}
+
 module.exports = {
     addRecord,
     fetchData,
@@ -153,5 +173,6 @@ module.exports = {
     auth,
     oauth2callback,
     edit,
-    fetchUserImages
+    fetchUserImages,
+    deleteImage
 }

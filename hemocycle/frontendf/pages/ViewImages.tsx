@@ -1,4 +1,4 @@
-import { Text, View, FlatList, Image, StyleSheet } from "react-native";
+import { Text, View, FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { CONFIG } from '../config.ts';
@@ -23,6 +23,15 @@ function ViewImages({ route }: any) {
     fetchImages();
   }, []);
 
+  const deleteImage = async (item:string) => {
+    try {
+        const response = await axios.delete(`http://${CONFIG.ip}:5000/delimage`, {data: {imageurl: item, id}})
+        console.log(response.data)
+    } catch(err: any) {
+        console.log(err.message)
+    }
+  }
+
   if (loading) return <Text>Loading...</Text>;
 
   if (images.length === 0) return <Text>No images uploaded yet.</Text>;
@@ -34,10 +43,15 @@ function ViewImages({ route }: any) {
         keyExtractor={(item, index) => index.toString()}
         numColumns={3}
         renderItem={({ item }) => (
-          <Image
-            source={{ uri: item }}
-            style={styles.image}
-          />
+          <View>
+            <Image
+                source={{ uri: item }}
+                style={styles.image}
+            />
+            <TouchableOpacity style={styles.button} onPress={() => deleteImage(item)}>
+                <Text>Delete</Text>
+            </TouchableOpacity>
+          </View>
         )}
       />
     </View>
@@ -51,6 +65,9 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 8,
   },
+  button: {
+    backgroundColor: 'pink'
+  }
 });
 
 export default ViewImages;
