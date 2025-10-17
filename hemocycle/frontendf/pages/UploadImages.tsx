@@ -42,7 +42,7 @@ async function uploadToServer(uri: string, fileName: string, id: string) {
   }
 }
 
-export default function UploadImages({ route }: any) {
+export default function UploadImages({ navigation,route }: any) {
   const [imageUri, setImageUri] = useState<string | null>(null)
   const id = route.params.id
 
@@ -73,6 +73,8 @@ export default function UploadImages({ route }: any) {
 
   return (
     <View style={styles.container}>
+      <Button title="View Images" onPress={() => navigation.navigate('View Images', {id})}/>
+      <View style={{ marginVertical: 10 }} />
       <Button title="Pick Image from Gallery" onPress={pickImage} />
       <View style={{ marginVertical: 10 }} />
       <Button title="Capture from Camera" onPress={captureFromCamera} />

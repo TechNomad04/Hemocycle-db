@@ -131,6 +131,20 @@ const edit = async(req, res) => {
     }
 }
 
+const fetchUserImages = async(req, res) => {
+    try {
+        const id = req.body.id
+        const user = await User.findById(id)
+        if(!user)
+            return res.status(404).json({status: false, message: "User not found"})
+        const images = user.images
+        return res.status(200).json({status: true, images})
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({status: false, message: "Internal server error"})
+    }
+}
+
 module.exports = {
     addRecord,
     fetchData,
@@ -139,4 +153,5 @@ module.exports = {
     auth,
     oauth2callback,
     edit,
+    fetchUserImages
 }
