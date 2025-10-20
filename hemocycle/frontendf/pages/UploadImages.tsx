@@ -22,29 +22,31 @@ async function requestCameraPermission() {
   }
 }
 
-async function uploadToServer(uri: string, fileName: string, id: string) {
-  const formData = new FormData()
-  formData.append("file", {
-    uri,
-    name: fileName,
-    type: "image/jpeg",
-  } as any)
-  formData.append("id", id)
-
-  try {
-    await axios.post(`http://${CONFIG.ip}:5000/upload`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-    Alert.alert("Success", "Image uploaded to server")
-  } catch (err) {
-    Alert.alert("Error", "Failed to upload image")
-    console.log(err)
-  }
-}
-
 export default function UploadImages({ navigation,route }: any) {
   const [imageUri, setImageUri] = useState<string | null>(null)
   const id = route.params.id
+  const part = route.params.part
+
+  async function uploadToServer(uri: string, fileName: string, id: string) {
+    const formData = new FormData()
+    formData.append("file", {
+      uri,
+      name: fileName,
+      type: "image/jpeg",
+    } as any)
+    formData.append("id", id)
+    formData.append("part", part)
+
+    try {
+      await axios.post(`http://${CONFIG.ip}:5000/upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      Alert.alert("Success", "Image uploaded to server")
+    } catch (err) {
+      Alert.alert("Error", "Failed to upload image")
+      console.log(err)
+    }
+  }
 
   const pickImage = async () => {
     const result = await launchImageLibrary({ mediaType: "photo", quality: 1 })
@@ -73,7 +75,7 @@ export default function UploadImages({ navigation,route }: any) {
 
   return (
     <View style={styles.container}>
-      <Button title="View Images" onPress={() => navigation.navigate('View Images', {id})}/>
+      <Button title="View Images" onPress={() => navigation.navigate('View Images', {id, part})}/>
       <View style={{ marginVertical: 10 }} />
       <Button title="Pick Image from Gallery" onPress={pickImage} />
       <View style={{ marginVertical: 10 }} />

@@ -13,6 +13,7 @@ import Data from './pages/Data';
 import UploadImages from './pages/UploadImages';
 import EditPage from './pages/EditPage';
 import ViewImages from './pages/ViewImages';
+import Part from './pages/Part';
 
 const Stack = createNativeStackNavigator()
 
@@ -27,6 +28,7 @@ function App() {
         <Stack.Screen name="Upload" component={UploadImages}/>
         <Stack.Screen name='Edit' component={EditPage}/>
         <Stack.Screen name='View Images' component={ViewImages}/>
+        <Stack.Screen name="Part" component={Part}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

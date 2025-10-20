@@ -5,15 +5,17 @@ import { CONFIG } from '../config.ts';
 
 function ViewImages({ route }: any) {
   const id = route.params.id;
+  const part = route.params.part
   const [images, setImages] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [imageId, setImageId] = useState<string[]>([])
 
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.post(`http://${CONFIG.ip}:5000/images`, { id });
+        const response = await axios.post(`http://${CONFIG.ip}:5000/images`, { id, part });
         setImages(response.data.images);
-        console.log(response.data.images);
+        setImageId(response.data.imageIds)
       } catch (err: any) {
         console.log(err.message);
       } finally {
@@ -25,7 +27,7 @@ function ViewImages({ route }: any) {
 
   const deleteImage = async (item:string) => {
     try {
-        const response = await axios.delete(`http://${CONFIG.ip}:5000/delimage`, {data: {imageurl: item, id}})
+        const response = await axios.delete(`http://${CONFIG.ip}:5000/delimage`, {data: {imId: item, id}})
         console.log(response.data)
     } catch(err: any) {
         console.log(err.message)
@@ -42,13 +44,13 @@ function ViewImages({ route }: any) {
         data={images}
         keyExtractor={(item, index) => index.toString()}
         numColumns={3}
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <View>
             <Image
                 source={{ uri: item }}
                 style={styles.image}
             />
-            <TouchableOpacity style={styles.button} onPress={() => deleteImage(item)}>
+            <TouchableOpacity style={styles.button} onPress={() => deleteImage(imageId[index])}>
                 <Text>Delete</Text>
             </TouchableOpacity>
           </View>

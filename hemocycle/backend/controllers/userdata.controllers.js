@@ -1,4 +1,5 @@
 const User = require('../schema/userinfo.schema')
+const Image = require('../schema/images.schema')
 const { google } = require('googleapis')
 const fs = require('fs')
 require('dotenv').config();
@@ -76,6 +77,7 @@ const oauth2callback = async(req, res) => {
 const uploadimage = async (req, res) => {
     try {
         const id = req.body.id;
+        const part = req.body.part
         const filePath = req.file.path
         const fileName = req.file.originalname
 
@@ -94,7 +96,9 @@ const uploadimage = async (req, res) => {
         fs.unlinkSync(filePath)
         const fileId = response.data.id
         const publicurl = `https://drive.google.com/uc?id=${fileId}`
-        const user = await User.findByIdAndUpdate(id, {$push: {images: publicurl}}, {new: true})
+        const image = new Image({url: publicurl, uploadedBy:id, part})
+        await image.save()
+        const user = await User.findByIdAndUpdate(id, {$push: {images: image._id}}, {new: true}).populate('images')
 
         if (!user) return res.status(404).json({ success: false, message: 'User not found' })
 
@@ -133,37 +137,56 @@ const edit = async(req, res) => {
 const fetchUserImages = async(req, res) => {
     try {
         const id = req.body.id
-        const user = await User.findById(id)
+        const part = req.body.part
+        const user = await User.findById(id).populate('images')
         if(!user)
             return res.status(404).json({status: false, message: "User not found"})
-        const images = user.images
-        return res.status(200).json({status: true, images})
+        const images = await Image.find({uploadedBy: id, part}).sort({createdAt:-1})
+        const urls = images.map(img=>img.url)
+        const imageIds = user.images.map(image=>image._id)
+        return res.status(200).json({status: true, images:urls, imageIds})
     } catch (err) {
         console.log(err)
         return res.status(500).json({status: false, message: "Internal server error"})
     }
 }
 
-const deleteImage = async(req, res) => {
+const deleteImage = async (req, res) => {
     try {
+        const { imId, id } = req.body;
 
         const extractFileId = (url) => {
-            const match = url.match(/id=([^&]+)/)
-            return match ? match[1] : null
+            const match = url.match(/id=([^&]+)/);
+            return match ? match[1] : null;
+        };
+
+        const image = await Image.findByIdAndDelete(imId);
+        if (!image) 
+            return res.status(404).json({ status: false, message: "Image not found" });
+
+        const user = await User.findByIdAndUpdate(
+            id,
+            { $pull: { images: imId } },
+            { new: true }
+        ).populate('images', 'url');
+
+        if (!user)
+            return res.status(404).json({ status: false, message: "User not found" });
+
+        const fileId = extractFileId(image.url);
+        if (fileId) {
+            await drive.files.delete({ fileId });
         }
-        const {imageurl, id} = req.body
-        const user = await User.findByIdAndUpdate(id, {$pull:{images: imageurl}}, {new: true})
-        await user.save()
-        if(!user)
-            return res.status(404).json({status: false, message: "Image or user not found"})
-        const fileId = extractFileId(imageurl)
-        await drive.files.delete({fileId})
-        return res.status(200).json({status: true, images: user.images})
+
+        const imageUrls = user.images.map(img => img.url);
+
+        return res.status(200).json({ status: true, images: imageUrls });
+
     } catch (err) {
-        console.log(err)
-        return res.status(500).json({status: false, message: "Internal server error"}) 
+        console.error(err);
+        return res.status(500).json({ status: false, message: "Internal server error" });
     }
-}
+};
 
 module.exports = {
     addRecord,

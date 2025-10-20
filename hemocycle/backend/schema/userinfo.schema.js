@@ -19,10 +19,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    images: {
-        type: [String],
-        default: []
-    }
+    images: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image'
+    }]
 }, {timestamps: true})
 
 module.exports = mongoose.model('User', userSchema)

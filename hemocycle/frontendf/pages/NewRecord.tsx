@@ -44,7 +44,7 @@ function NewRecord ({navigation}:any) {
         <TouchableOpacity style={styles.button} onPress={submitinfo}>
             <Text>Submit</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Upload', {id})}>
+        <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('Part', {id})}>
             <Text>Upload Images</Text>
         </TouchableOpacity>
        </View> 

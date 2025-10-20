@@ -49,7 +49,7 @@ function Data ({navigation}:any) {
             <Text>Age: {item.age}</Text>
             <Text>Gender: {item.gender}</Text>
             <Text>Category: {item.category}</Text>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Upload', {id: item._id})}>
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Part', {id: item._id})}>
                 <Text>Uploads</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => deleteEntry(item._id)}>
