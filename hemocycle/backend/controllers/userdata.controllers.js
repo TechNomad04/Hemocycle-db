@@ -2,6 +2,7 @@ const User = require('../schema/userinfo.schema')
 const Image = require('../schema/images.schema')
 const { google } = require('googleapis')
 const fs = require('fs')
+const mongoose = require('mongoose')
 require('dotenv').config();
 const addRecord = async(req, res) => {
     try {
@@ -24,23 +25,6 @@ const fetchData = async(req, res) => {
         const users = await User.find().sort({createdAt: -1})
         return res.status(200).json({status: true, users})
     } catch (err) {
-        console.log(err)
-        return res.status(500).json({status: false, message: "Internal server error"})
-    }
-}
-
-const deleteRecord = async(req, res) => {
-    try {
-        const id = req.body.id;
-        if(!id)
-            return res.status(400).json({status: false, message: "User id absent"})
-
-        const user = await User.findByIdAndDelete(id)
-        if(!user)
-            return res.status(404).json({status: false, message: "User not found"})
-
-        return res.status(200).json({status: true, user})
-    } catch(err) {
         console.log(err)
         return res.status(500).json({status: false, message: "Internal server error"})
     }
@@ -108,6 +92,54 @@ const uploadimage = async (req, res) => {
         res.status(500).json({ success: false, error: err.message })
     }
 }
+
+const deleteRecord = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const { id } = req.body;
+    if (!id) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ status: false, message: "User ID absent" });
+    }
+
+    const user = await User.findById(id).populate('images');
+    if (!user) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ status: false, message: "User not found" });
+    }
+
+    const images = user.images;
+    if (images && images.length > 0) {
+      for (const img of images) {
+        const fileId = img.url.match(/id=([^&]+)/)?.[1];
+        if (fileId) {
+          await drive.files.delete({ fileId });
+        } else {
+          throw new Error(`Invalid file URL for image ${img._id}`);
+        }
+      }
+      await Image.deleteMany({ uploadedBy: id }, { session });
+    }
+
+    await User.findByIdAndDelete(id, { session });
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return res.status(200).json({ status: true, message: "User and all images deleted successfully" });
+
+  } catch (err) {
+    console.error(err);
+    await session.abortTransaction();
+    session.endSession();
+    return res.status(500).json({ status: false, message: "Internal server error" });
+  }
+};
+
 
 const edit = async(req, res) => {
     try{
