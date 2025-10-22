@@ -1,7 +1,6 @@
 import { View, StyleSheet, FlatList, Text, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import {CONFIG} from '../config'
 
 type recordType = {
     name: string,

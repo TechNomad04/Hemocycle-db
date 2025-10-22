@@ -3,7 +3,6 @@ import { Picker } from "@react-native-picker/picker"
 import React from "react"
 import { useState } from "react"
 import axios from "axios"
-import {CONFIG} from '../config'
 
 function NewRecord ({navigation}:any) {
     const [name, setName] = useState<string>('')

@@ -2,7 +2,6 @@ import { View, Image, Button, StyleSheet, PermissionsAndroid, Alert } from "reac
 import { launchImageLibrary, launchCamera } from "react-native-image-picker"
 import { useState } from "react"
 import axios from "axios"
-import { CONFIG } from '../config'
 
 async function requestCameraPermission() {
   try {

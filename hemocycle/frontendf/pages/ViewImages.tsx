@@ -1,7 +1,6 @@
 import { Text, View, FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { CONFIG } from '../config.ts';
 
 function ViewImages({ route }: any) {
   const id = route.params.id;

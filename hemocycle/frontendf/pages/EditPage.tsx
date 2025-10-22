@@ -2,7 +2,6 @@ import { View, TextInput, Text, StyleSheet, TouchableOpacity } from "react-nativ
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker"
 import axios from "axios";
-import { CONFIG } from "../config.ts";
 
 function EditPage({ navigation,route }: any) {
     const {id, n, g, a, c} = route.params;
