@@ -199,7 +199,7 @@ const fetchUserImages = async(req, res) => {
             return res.status(404).json({status: false, message: "User not found"})
         const images = await Image.find({uploadedBy: id, part}).sort({createdAt:-1})
         const urls = images.map(img=>img.url)
-        const imageIds = user.images.map(image=>image._id)
+        const imageIds = images.map(image=>image._id)
         return res.status(200).json({status: true, images:urls, imageIds})
     } catch (err) {
         console.log(err)
