@@ -38,9 +38,14 @@ const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_U
 const SCOPES = ['https://www.googleapis.com/auth/drive.file']
 const drive = google.drive({ version: 'v3', auth: oAuth2Client })
 
-if (fs.existsSync('tokens.json')) {
-    const tokens = JSON.parse(fs.readFileSync('tokens.json'))
-    oAuth2Client.setCredentials(tokens)
+// if (fs.existsSync('tokens.json')) {
+//     const tokens = JSON.parse(fs.readFileSync('tokens.json'))
+//     oAuth2Client.setCredentials(tokens)
+// }
+
+if (process.env.TOKENS_JSON) {
+  const tokens = JSON.parse(process.env.TOKENS_JSON);
+  oAuth2Client.setCredentials(tokens);
 }
 
 const auth = async(req, res) => {
