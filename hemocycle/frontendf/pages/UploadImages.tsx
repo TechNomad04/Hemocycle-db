@@ -38,7 +38,7 @@ export default function UploadImages({ navigation,route }: any) {
     formData.append("part", part)
 
     try {
-      await axios.post(`http://${CONFIG.ip}:5000/upload`, formData, {
+      await axios.post(`https://hemocycle-db.onrender.com/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       Alert.alert("Success", "Image uploaded to server")
