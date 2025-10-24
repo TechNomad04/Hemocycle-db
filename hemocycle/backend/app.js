@@ -1,5 +1,6 @@
 const express = require('express')
 const app = express()
+const {errHandler} = require('./middlewares/errhandler')
 const cors = require('cors')
 const {connectdb} = require('./db')
 const userInfoRoutes = require('./routes/userinfo.routes')
@@ -8,6 +9,8 @@ app.use(cors())
 app.use(express.json())
 
 app.use('/', userInfoRoutes)
+
+app.use(errHandler)
 
 connectdb().then(() => {
   const PORT = process.env.PORT || 5000
