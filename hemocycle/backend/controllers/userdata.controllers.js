@@ -1,8 +1,9 @@
 const User = require('../schema/userinfo.schema')
 const Image = require('../schema/images.schema')
-const { google } = require('googleapis')
 const fs = require('fs')
 const mongoose = require('mongoose')
+const {drive, oAuth2Client} = require('../utils/drive.utils')
+
 require('dotenv').config();
 const addRecord = async(req, res) => {
     try {
@@ -28,24 +29,6 @@ const fetchData = async(req, res) => {
         console.log(err)
         return res.status(500).json({status: false, message: "Internal server error"})
     }
-}
-
-const CLIENT_ID = process.env.CLIENT_ID
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-const REDIRECT_URI = `http://localhost:5000/oauth2callback`
-
-const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
-const SCOPES = ['https://www.googleapis.com/auth/drive.file']
-const drive = google.drive({ version: 'v3', auth: oAuth2Client })
-
-// if (fs.existsSync('tokens.json')) {
-//     const tokens = JSON.parse(fs.readFileSync('tokens.json'))
-//     oAuth2Client.setCredentials(tokens)
-// }
-
-if (process.env.TOKENS_JSON) {
-  const tokens = JSON.parse(process.env.TOKENS_JSON);
-  oAuth2Client.setCredentials(tokens);
 }
 
 const auth = async(req, res) => {

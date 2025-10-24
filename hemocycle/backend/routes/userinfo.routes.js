@@ -3,7 +3,7 @@ const router = express.Router()
 const multer = require('multer')
 const upload = multer({ dest: 'uploads/' })
 const {deleteImage,fetchUserImages,addRecord,fetchData,deleteRecord, uploadimage, auth, oauth2callback, edit} = require('../controllers/userdata.controllers')
-const {uploadimageToDrive} = require('../middlewares/uploadToDrive')
+const {uploadimageToDrive} = require('../middlewares/user.middlewares')
 
 router.post('/addinfo', addRecord)
 router.get('/fetchdata', fetchData)
