@@ -73,5 +73,5 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-config.ts
 hemocycle-7e4cac24be63.json
+config.tsx

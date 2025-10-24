@@ -18,7 +18,7 @@ function Data ({navigation}:any) {
     useEffect(()=> {
         const fetch = async () => {
             try {
-                const response = await axios.get(`https://hemocycle.onrender.com/fetchdata`)
+                const response = await axios.get(`http://${CONFIG.ip}:5000/fetchdata`)
                 console.log(response.data)
                 setData(response.data.users)
 
@@ -33,7 +33,7 @@ function Data ({navigation}:any) {
 
     const deleteEntry = async(id:string) => {
         try {
-            const response = await axios.delete(`https://hemocycle.onrender.com/deleteRecord`, {
+            const response = await axios.delete(`http://${CONFIG.ip}:5000/deleteRecord`, {
                 data: {id}
             })
             console.log(response.data)

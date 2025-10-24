@@ -63,51 +63,9 @@ const oauth2callback = async(req, res) => {
 
 const uploadimage = async (req, res) => {
     try {
-        const id = req.body.id;
-        const part = req.body.part
-        const filePath = req.file.path
-        const fileName = req.file.originalname
-        let folderId
-        const category = (await User.findById(id)).category
-        if(!category)
-            return res.status(404).json({status: false, message: "User doesn't exist"})
-        if (part == 'Conjunctiva') {
-            if(category == 'Non-Anemic')
-                folderId = '1ZbzorldZEoC16makUAZKDKqvZP_MY0IU'
-            else if (category == 'Mild')
-                folderId = '12jDT8YwhoK-q1ZcjpNcJpWaYjiYKcwOc'
-            else 
-                folderId = '1n7OKWiUKrTcwtR44JXuxqYetnLt0qJCe'
-        } else if (part == 'Fingernails') {
-            if(category == 'Non-Anemic')
-                folderId = '1mFrcD5vh6OC93u2DXVgUVKpQgp6gxT6G'
-            else if (category == 'Mild')
-                folderId = '1SOOfg0YAcC95JoWmg520YVw_g6zhVHDa'
-            else 
-                folderId = '1KW360HS86LLGkX7Su_07e3c3GMVjQna5'
-        } else {
-            if(category == 'Non-Anemic')
-                folderId = '1dxBgCNg705XZRWcnHjufDDCd7xtycmjf'
-            else if (category == 'Mild')
-                folderId = '1TmLsVTdWy4BJQpmWLRCSqoBMQSkR-ceW'
-            else 
-                folderId = '1ogM2qiBz3iBDzaPdt6Cu_mD2NK06z6ZT'
-        }
-
-        const response = await drive.files.create({
-            requestBody: {
-                name: fileName,
-                parents: [folderId],
-            },
-            media: {
-                mimeType: req.file.mimetype,
-                body: fs.createReadStream(filePath),
-            },
-            fields: 'id, name, parents',
-        })
-
-        fs.unlinkSync(filePath)
-        const fileId = response.data.id
+        const fileId = req.fileId
+        const id = req.id
+        const part = req.part
         const publicurl = `https://drive.google.com/uc?id=${fileId}`
         const image = new Image({url: publicurl, uploadedBy:id, part})
         await image.save()
@@ -115,7 +73,7 @@ const uploadimage = async (req, res) => {
 
         if (!user) return res.status(404).json({ success: false, message: 'User not found' })
 
-        res.json({ success: true, fileId: response.data.id, name: response.data.name, user })
+        res.json({ success: true, fileId, user })
     } catch (err) {
         console.error(err)
         res.status(500).json({ success: false, error: err.message })
