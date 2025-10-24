@@ -14,7 +14,7 @@ function NewRecord ({navigation}:any) {
 
     const submitinfo = async() => {
         try {
-            const response = await axios.post(`http://${CONFIG.ip}:5000/addinfo/`, {
+            const response = await axios.post(`https://hemocycle.onrender.com/addinfo/`, {
                 name,
                 age,
                 gender,
