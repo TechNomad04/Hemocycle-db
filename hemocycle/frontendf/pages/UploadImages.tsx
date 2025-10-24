@@ -2,6 +2,7 @@ import { View, Image, Button, StyleSheet, PermissionsAndroid, Alert } from "reac
 import { launchImageLibrary, launchCamera } from "react-native-image-picker"
 import { useState } from "react"
 import axios from "axios"
+import {CONFIG} from '../config'
 
 async function requestCameraPermission() {
   try {
@@ -37,7 +38,7 @@ export default function UploadImages({ navigation,route }: any) {
     formData.append("part", part)
 
     try {
-      await axios.post(`https://hemocycle-db.onrender.com/upload`, formData, {
+      await axios.post(`http://${CONFIG.ip}:5000/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       })
       Alert.alert("Success", "Image uploaded to server")

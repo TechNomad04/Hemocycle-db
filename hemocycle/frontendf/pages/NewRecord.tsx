@@ -3,6 +3,7 @@ import { Picker } from "@react-native-picker/picker"
 import React from "react"
 import { useState } from "react"
 import axios from "axios"
+import {CONFIG} from '../config'
 
 function NewRecord ({navigation}:any) {
     const [name, setName] = useState<string>('')
@@ -13,7 +14,7 @@ function NewRecord ({navigation}:any) {
 
     const submitinfo = async() => {
         try {
-            const response = await axios.post(`https://hemocycle-db.onrender.com/addinfo/`, {
+            const response = await axios.post(`http://${CONFIG.ip}:5000/addinfo/`, {
                 name,
                 age,
                 gender,

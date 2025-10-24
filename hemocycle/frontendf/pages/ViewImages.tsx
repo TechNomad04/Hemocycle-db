@@ -1,6 +1,7 @@
 import { Text, View, FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import {CONFIG} from '../config'
 
 function ViewImages({ route }: any) {
   const id = route.params.id;
@@ -12,7 +13,7 @@ function ViewImages({ route }: any) {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.post(`https://hemocycle-db.onrender.com/images`, { id, part });
+        const response = await axios.post(`http://${CONFIG.ip}:5000/images`, { id, part });
         setImages(response.data.images);
         setImageId(response.data.imageIds)
       } catch (err: any) {
@@ -26,7 +27,7 @@ function ViewImages({ route }: any) {
 
   const deleteImage = async (item:string) => {
     try {
-        const response = await axios.delete(`https://hemocycle-db.onrender.com/delimage`, {data: {imId: item, id}})
+        const response = await axios.delete(`http://${CONFIG.ip}:5000/delimage`, {data: {imId: item, id}})
         console.log(response.data)
     } catch(err: any) {
         console.log(err.message)
