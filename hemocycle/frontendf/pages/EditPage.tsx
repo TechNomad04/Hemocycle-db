@@ -4,7 +4,7 @@ import { Picker } from "@react-native-picker/picker"
 import axios from "axios";
 import {CONFIG} from '../config'
 
-function EditPage({ navigation,route }: any) {
+function EditPage({ route }: any) {
     const {id, n, g, a, c} = route.params;
 
     const [age, setAge] = useState<string>('')
@@ -15,7 +15,6 @@ function EditPage({ navigation,route }: any) {
             const response = await axios.patch(`http://${CONFIG.ip}:5000/edit`, {age, category, id})
 
             console.log(response.data)
-            navigation.navigate('Data')
         } catch (err:any) {
             console.log(err.message)
         }

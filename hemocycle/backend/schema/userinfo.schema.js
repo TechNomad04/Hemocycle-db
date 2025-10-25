@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const {xssCleanPlugin} = require('../utils/mongoosexssclean.utils')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -24,5 +25,7 @@ const userSchema = new mongoose.Schema({
         ref: 'Image'
     }]
 }, {timestamps: true})
+
+userSchema.plugin(xssCleanPlugin)
 
 module.exports = mongoose.model('User', userSchema)

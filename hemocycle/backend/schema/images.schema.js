@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {xssCleanPlugin} = require('../utils/mongoosexssclean.utils')
 
 const imageSchema = new mongoose.Schema({
     url: {
@@ -14,5 +15,7 @@ const imageSchema = new mongoose.Schema({
         enum: ["Fingernails", "Conjunctiva", "Tongue"]
     }
 }, { timestamps: true });
+
+imageSchema.plugin(xssCleanPlugin)
 
 module.exports = mongoose.model('Image', imageSchema);
