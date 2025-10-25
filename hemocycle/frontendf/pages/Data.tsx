@@ -1,4 +1,4 @@
-import { View, StyleSheet, FlatList, Text, TouchableOpacity } from "react-native";
+import { View, StyleSheet, FlatList, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {CONFIG} from '../config'
@@ -14,6 +14,7 @@ type recordType = {
 function Data ({navigation}:any) {
     const [data, setData] = useState<recordType[]>([])
     const [loading, setLoading] = useState<boolean>(true)
+    const [deleting, setDeleting] = useState<string | null>(null)
 
     useEffect(()=> {
         const fetch = async () => {
@@ -33,12 +34,16 @@ function Data ({navigation}:any) {
 
     const deleteEntry = async(id:string) => {
         try {
+            setDeleting(id)
             const response = await axios.delete(`http://${CONFIG.ip}:5000/deleteRecord`, {
                 data: {id}
             })
+            setData(prev => prev.filter((i) => i._id !== id))
             console.log(response.data)
         } catch(err:any) {
             console.log(err.message)
+        } finally {
+            setDeleting(null)
         }
     }
 
@@ -53,15 +58,25 @@ function Data ({navigation}:any) {
                 <Text>Uploads</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={() => deleteEntry(item._id)}>
-                <Text>Delete Entry</Text>
+                {deleting === item._id ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                    ) : (
+                    <Text>Delete</Text>
+                    )}
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Edit', {
-                id: item._id,
-                n: item.name,
-                a: item.age,
-                g: item.gender,
-                c: item.category
-            })}>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigation.navigate('Edit', {
+                    id: item._id,
+                    n: item.name,
+                    a: item.age,
+                    g: item.gender,
+                    c: item.category,
+                    onUpdate: (updatedUser: recordType) => {
+                    setData(prev => prev.map(u => u._id === updatedUser._id ? updatedUser : u));
+                    }
+                })}
+            >
                 <Text>Edit</Text>
             </TouchableOpacity>
         </View>
