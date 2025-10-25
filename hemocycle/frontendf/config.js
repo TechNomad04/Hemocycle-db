@@ -1,3 +1,3 @@
 export const CONFIG = {
-    ip: '192.168.1.4'
+    ip: '10.30.7.160'
 }
