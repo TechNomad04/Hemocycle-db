@@ -67,10 +67,10 @@ function NewRecord({ navigation }: any) {
       </Picker>
 
       <TouchableOpacity style={styles.button} onPress={submitinfo}>
-        <Text style={styles.buttonText}>Submit</Text>
+        <Text>Submit</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Part", { id })}>
-        <Text style={styles.buttonText}>Upload Images</Text>
+        <Text>Upload Images</Text>
       </TouchableOpacity>
     </View>
   );
@@ -123,12 +123,8 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     borderColor: "#E07A4B"
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16
   }
+ 
 });
 
 export default NewRecord;

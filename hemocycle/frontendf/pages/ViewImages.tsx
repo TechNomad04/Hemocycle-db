@@ -41,12 +41,12 @@ function ViewImages({ route }: any) {
     }
   };
 
-  if (loading) return <Text>Loading...</Text>;
-  if (images.length === 0) return <Text>No images uploaded yet.</Text>;
+  if (loading) return <Text style={styles.loadingText}>Loading...</Text>;
+  if (images.length === 0) return <Text style={styles.loadingText}>No images uploaded yet.</Text>;
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      <FlatList
+    <View style={styles.container} >
+      <FlatList style={styles.container}
         data={images}
         keyExtractor={(item, index) => index.toString()}
         numColumns={3}
@@ -75,23 +75,56 @@ function ViewImages({ route }: any) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#f1e7db",
+  },
   image: {
-    width: 100,
-    height: 100,
-    margin: 5,
-    borderRadius: 8,
+    width: 120,
+    height: 120,
+    margin: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#E07A4B",
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 4,
   },
   button: {
-    backgroundColor: 'pink',
-    alignItems: 'center',
-    paddingVertical: 5,
-    marginTop: 5,
-    borderRadius: 5,
+    backgroundColor: "#FA9359",
+    alignItems: "center",
+    paddingVertical: 8,
+    marginTop: 6,
+    marginHorizontal: 8,
+    borderRadius: 8,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+
+    borderWidth: 1,
+    borderColor: "#E07A4B",
   },
   buttonText: {
-    color: '#000',
-  }
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 14,
+  },
+  loadingText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#E07A4B",
+    alignSelf: "center",
+    marginTop: 20,
+  },
 });
+
 
 export default ViewImages;
 

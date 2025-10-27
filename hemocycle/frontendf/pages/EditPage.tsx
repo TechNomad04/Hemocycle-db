@@ -2,14 +2,14 @@ import { View, TextInput, Text, StyleSheet, TouchableOpacity, Alert } from "reac
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
-import { CONFIG } from '../config';
+import { CONFIG } from "../config";
 
 function EditPage({ route }: any) {
   const { id, n, g, a, c, onUpdate } = route.params;
 
   const [age, setAge] = useState<string>(a.toString());
   const [category, setCategory] = useState<string>(c);
-  const [updated, setUpdated] = useState<boolean>(false); // state to track update
+  const [updated, setUpdated] = useState<boolean>(false);
 
   const update = async () => {
     if (!age || !category) {
@@ -29,8 +29,7 @@ function EditPage({ route }: any) {
         category: category,
       };
 
-      onUpdate?.(updatedUser)
-
+      onUpdate?.(updatedUser);
       setUpdated(true);
       Alert.alert("Success", "User updated successfully");
     } catch (err: any) {
@@ -42,11 +41,11 @@ function EditPage({ route }: any) {
   return (
     <View style={styles.container}>
       <View style={styles.item}>
-        <Text>User Id: {id}</Text>
-        <Text>Name: {n}</Text>
-        <Text>Age: {updated ? age : a}</Text>
-        <Text>Gender: {g}</Text>
-        <Text>Category: {updated ? category : c}</Text>
+        <Text style={styles.itemText}>User Id: {id}</Text>
+        <Text style={styles.itemText}>Name: {n}</Text>
+        <Text style={styles.itemText}>Age: {updated ? age : a}</Text>
+        <Text style={styles.itemText}>Gender: {g}</Text>
+        <Text style={styles.itemText}>Category: {updated ? category : c}</Text>
       </View>
 
       <TextInput
@@ -69,7 +68,7 @@ function EditPage({ route }: any) {
       </Picker>
 
       <TouchableOpacity style={styles.button} onPress={update}>
-        <Text>Submit</Text>
+        <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
     </View>
   );
@@ -79,36 +78,77 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "black",
+    backgroundColor: "#f1e7db",
     alignItems: "center",
     justifyContent: "flex-start",
   },
   input: {
-    width: 250,
-    height: 40,
+    width: 300,
+    height: 50,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#E07A4B",
     borderRadius: 8,
     marginVertical: 8,
     paddingHorizontal: 10,
+    color: "#E07A4B",
+    fontWeight: "bold",
+    fontSize: 16,
+    backgroundColor: "#e07a4b32",
   },
   item: {
     padding: 12,
     marginVertical: 6,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 6,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#E07A4B",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+    width: 320,
+  },
+  itemText: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#E07A4B",
+    marginBottom: 4,
   },
   picker: {
     width: 300,
     height: 50,
+    marginVertical: 8,
+    borderColor: "#E07A4B",
+    borderWidth: 1,
+    borderRadius: 8,
+    overflow: "hidden",
+    color: "#E07A4B",
+    fontWeight: "bold",
+    fontSize: 16,
+    backgroundColor: "#e07a4b32",
   },
   button: {
-    backgroundColor: 'pink',
-    alignItems: 'center',
-    paddingVertical: 8,
-    marginTop: 10,
-    borderRadius: 5,
-    width: 120,
+    backgroundColor: "#FA9359",
+    alignItems: "center",
+    paddingVertical: 12,
+    marginTop: 12,
+    borderRadius: 10,
+    width: 200,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+    elevation: 5,
+
+    borderWidth: 1,
+    borderColor: "#E07A4B",
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
