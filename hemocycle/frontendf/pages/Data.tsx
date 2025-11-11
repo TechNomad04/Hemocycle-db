@@ -9,6 +9,9 @@ type recordType = {
   gender: string;
   category: string;
   _id: string;
+  patientid: string;
+  cncid: string;
+  others: string;
 };
 
 function Data({ navigation }: any) {
@@ -48,11 +51,13 @@ function Data({ navigation }: any) {
 
   const renderItems = ({ item }: { item: recordType }) => (
     <View style={styles.item}>
-      <Text style={styles.itemText}>User Id: {item._id}</Text>
+      <Text style={styles.itemText}>Patient Id: {item.patientid}</Text>
+      <Text style={styles.itemText}>CNC Id: {item.cncid}</Text>
       <Text style={styles.itemText}>Name: {item.name}</Text>
       <Text style={styles.itemText}>Age: {item.age}</Text>
       <Text style={styles.itemText}>Gender: {item.gender}</Text>
       <Text style={styles.itemText}>Category: {item.category}</Text>
+      <Text style={styles.itemText}>Others: {item.others}</Text>
 
       <TouchableOpacity
         style={styles.button}
@@ -81,6 +86,9 @@ function Data({ navigation }: any) {
             a: item.age,
             g: item.gender,
             c: item.category,
+            o: item.others,
+            patientid: item.patientid,
+            cncid: item.cncid,
             onUpdate: (updatedUser: recordType) => {
               setData(prev =>
                 prev.map(u => (u._id === updatedUser._id ? updatedUser : u))

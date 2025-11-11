@@ -10,6 +10,9 @@ function NewRecord({ navigation }: any) {
   const [gender, setGender] = useState<string>("Male");
   const [category, setCategory] = useState<string>("Non-Anemic");
   const [id, setid] = useState<string>("");
+  const [patientid, setpatientid] = useState<string>("")
+  const [cncid, setcncid] = useState<string>("")
+  const [others, setothers] = useState<string>("")
 
   const submitinfo = async () => {
     try {
@@ -17,7 +20,10 @@ function NewRecord({ navigation }: any) {
         name,
         age,
         gender,
-        category
+        category,
+        patientid,
+        cncid,
+        others
       });
       console.log(response.data);
       setid(response.data.user._id);
@@ -29,19 +35,40 @@ function NewRecord({ navigation }: any) {
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder="Enter Your Name"
+          placeholder="Enter Patient Id"
+          placeholderTextColor="#E07A4B"
+          style={styles.input}
+          value={patientid}
+          onChangeText={(text) => setpatientid(text)}
+      />
+      <TextInput
+          placeholder="Enter CNC Id"
+          placeholderTextColor="#E07A4B"
+          style={styles.input}
+          value={cncid}
+          onChangeText={(text) => setcncid(text)}
+      />
+      <TextInput
+        placeholder="Enter Name"
         placeholderTextColor="#E07A4B"
         style={styles.input}
         value={name}
         onChangeText={(text) => setName(text)}
       />
       <TextInput
-        placeholder="Enter Your Age"
+        placeholder="Enter Age"
         placeholderTextColor="#E07A4B"
         style={styles.input}
         keyboardType="numeric"
         value={age}
         onChangeText={(text) => setAge(text)}
+      />
+      <TextInput
+        placeholder="Other details"
+        placeholderTextColor="#E07A4B"
+        style={styles.input}
+        value={others}
+        onChangeText={(text) => setothers(text)}
       />
 
       <Picker

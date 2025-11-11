@@ -1,14 +1,15 @@
 import { View, TextInput, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-import { useState } from "react";
+import { use, useState } from "react";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { CONFIG } from "../config";
 
 function EditPage({ route }: any) {
-  const { id, n, g, a, c, onUpdate } = route.params;
+  const { patientid, cncid, id, n, g, a, c, o, onUpdate } = route.params;
 
   const [age, setAge] = useState<string>(a.toString());
   const [category, setCategory] = useState<string>(c);
+  const [others, setothers] = useState<string>(o);
   const [updated, setUpdated] = useState<boolean>(false);
 
   const update = async () => {
@@ -18,7 +19,7 @@ function EditPage({ route }: any) {
     }
 
     try {
-      const response = await axios.patch(`http://${CONFIG.ip}:5000/edit`, { age, category, id });
+      const response = await axios.patch(`http://${CONFIG.ip}:5000/edit`, { age, category, others, id });
       console.log(response.data);
 
       const updatedUser = {
@@ -27,6 +28,9 @@ function EditPage({ route }: any) {
         age: Number(age),
         gender: g,
         category: category,
+        others: others,
+        patientid,
+        cncid,
       };
 
       onUpdate?.(updatedUser);
@@ -41,10 +45,12 @@ function EditPage({ route }: any) {
   return (
     <View style={styles.container}>
       <View style={styles.item}>
-        <Text style={styles.itemText}>User Id: {id}</Text>
+        <Text style={styles.itemText}>Patient Id: {patientid}</Text>
+        <Text style={styles.itemText}>CNC Id: {cncid}</Text>
         <Text style={styles.itemText}>Name: {n}</Text>
         <Text style={styles.itemText}>Age: {updated ? age : a}</Text>
         <Text style={styles.itemText}>Gender: {g}</Text>
+        <Text style={styles.itemText}>Others: {others}</Text>
         <Text style={styles.itemText}>Category: {updated ? category : c}</Text>
       </View>
 
@@ -66,6 +72,13 @@ function EditPage({ route }: any) {
         <Picker.Item label="Mild" value="Mild" />
         <Picker.Item label="Severe" value="Severe" />
       </Picker>
+
+      <TextInput
+        placeholder="Age"
+        style={styles.input}
+        value={others}
+        onChangeText={a => setothers(a)}
+      />
 
       <TouchableOpacity style={styles.button} onPress={update}>
         <Text style={styles.buttonText}>Submit</Text>
