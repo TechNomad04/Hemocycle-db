@@ -14,25 +14,25 @@ const uploadimageToDrive = async (req, res, next) => {
             return res.status(404).json({status: false, message: "User doesn't exist"})
         if (part == 'Conjunctiva') {
             if(category == 'Non-Anemic')
-                folderId = '1ZbzorldZEoC16makUAZKDKqvZP_MY0IU'
+                folderId = '1hZr_bFm0RLsct1-8MOLlCTDvtGV68XNe'
             else if (category == 'Mild')
-                folderId = '12jDT8YwhoK-q1ZcjpNcJpWaYjiYKcwOc'
+                folderId = '1r5JqUKj0v5mGF7aaktDzimbOJ-kBa9Yy'
             else 
-                folderId = '1n7OKWiUKrTcwtR44JXuxqYetnLt0qJCe'
+                folderId = '16jtx5B18gEfJYuEP8ExT3Y1TgQ3qaR8e'
         } else if (part == 'Fingernails') {
             if(category == 'Non-Anemic')
-                folderId = '1mFrcD5vh6OC93u2DXVgUVKpQgp6gxT6G'
+                folderId = '1fWZaeZApKZoakvntjxqQIqshZg6w86hM'
             else if (category == 'Mild')
-                folderId = '1SOOfg0YAcC95JoWmg520YVw_g6zhVHDa'
+                folderId = 'O6MM4Ic_a4TBX3OwUfzMEkWisqZwPgHV'
             else 
-                folderId = '1KW360HS86LLGkX7Su_07e3c3GMVjQna5'
+                folderId = '1usyyw_wdvwC6qpaGrI_0oUQcX9YLYKwP'
         } else {
             if(category == 'Non-Anemic')
-                folderId = '1dxBgCNg705XZRWcnHjufDDCd7xtycmjf'
+                folderId = '1zdsQCSlTsVClFgCKZXO-D-xfA3v73A1I'
             else if (category == 'Mild')
-                folderId = '1TmLsVTdWy4BJQpmWLRCSqoBMQSkR-ceW'
+                folderId = '1JS23PwzP5-tbZJivUHwo2raFgHa67n_A'
             else 
-                folderId = '1ogM2qiBz3iBDzaPdt6Cu_mD2NK06z6ZT'
+                folderId = '1U2L1YZ7-_Nz-aTlcY8P-n7SK5cOd_8t0'
         }
 
         const response = await drive.files.create({

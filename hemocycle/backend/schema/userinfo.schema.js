@@ -20,6 +20,17 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    patientid: {
+        type: String,
+        required: true
+    },
+    cncid: {
+        type: String,
+        required: true
+    },
+    others: {
+        type: String
+    },
     images: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Image'

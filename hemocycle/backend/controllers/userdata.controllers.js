@@ -7,11 +7,11 @@ const asyncHandler = require('../utils/asyncHandler')
 
 require('dotenv').config();
 const addRecord = asyncHandler(async(req, res) => {
-    const {name, gender, age, category} = req.body
-    if(!name || !gender || !age || !category)
+    const {name, gender, age, category, patientid, cncid, others} = req.body
+    if(!name || !gender || !age || !category || !patientid || !cncid)
         return res.status(400).json({status:false, message: "Missing details"})
 
-    const user = new User({name, gender, age, category})
+    const user = new User({name, gender, age, category, patientid, cncid, others})
     await user.save()
 
     return res.status(200).json({status:true, user})
@@ -23,6 +23,7 @@ const fetchData = asyncHandler(async(req, res) => {
 })
 
 const auth = asyncHandler(async(req, res) => {
+    const SCOPES = ["https://www.googleapis.com/auth/drive.file"];
     const authUrl = oAuth2Client.generateAuthUrl({ access_type: 'offline', scope: SCOPES })
     res.redirect(authUrl)
 })
@@ -97,7 +98,7 @@ const deleteRecord = async (req, res) => {
 };
 
 const edit = asyncHandler(async(req, res) => {
-    const {id, name, age, gender, category} = req.body;
+    const {id, name, age, gender, category, others} = req.body;
     if(!id)
         return res.status(400).json({status: false, message: "Bad request"})
     if(!name && !age && !gender && !category)
@@ -111,6 +112,8 @@ const edit = asyncHandler(async(req, res) => {
         user.gender = gender
     if(category)
         user.category = category
+    if(others)
+        user.others = others
 
     await user.save()
     return res.status(200).json({status: true, user})
